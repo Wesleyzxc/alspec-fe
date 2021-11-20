@@ -11,8 +11,10 @@ function App() {
   const columns: Column<CoinDTO>[] = useMemo(() => {
     return [
       {
-        accessor: 'market_cap',
-        Header: 'Market Cap',
+        accessor: 'image',
+        Cell: ({ value }: CellProps<CoinDTO>) => <img height={50} src={value} alt="coin" />,
+        Header: 'Image',
+        disableSortBy: true,
       },
       {
         accessor: 'symbol',
@@ -23,14 +25,12 @@ function App() {
         Header: 'Name',
       },
       {
-        accessor: 'current_price',
-        Header: 'Current Price',
+        accessor: 'market_cap',
+        Header: 'Market Cap',
       },
       {
-        accessor: 'image',
-        Cell: ({ value }: CellProps<CoinDTO>) => <img height={50} src={value} alt="coin" />,
-        Header: 'Image',
-        disableSortBy: true,
+        accessor: 'current_price',
+        Header: 'Current Price (AUD)',
       },
     ];
   }, []);
