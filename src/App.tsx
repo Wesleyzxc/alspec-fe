@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useMemo, useState } from 'react';
+import { useQuery } from 'react-query';
+import { CellProps, Column } from 'react-table';
+import { getCoins } from './api/codegeckoApi';
 import './App.css';
+import Table from './components/table/Table';
 
 function App() {
+  const [query, setQuery] = useState(false);
+  const columns: Column<any>[] = useMemo(() => {
+    return [
+      {
+        accessor: 'initials',
+        Cell: ({ value }: CellProps<any>) => <div>{value}</div>,
+        Header: 'Initials',
+      },
+    ];
+  }, []);
+
+  const data = [{ initials: 'bla' }, { initials: 'blddda' }, { initials: 'bladasdf' }];
+
+  const { data: queriedData, isFetching } = useQuery(getCoins({ enabled: query }));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="table-container">
+        <button onClick={() => setQuery(true)}>Test</button>
+        <Table columns={columns} data={data} />
+      </div>
     </div>
   );
 }
