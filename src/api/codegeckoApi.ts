@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { UseQueryOptions } from 'react-query';
 
 export interface CoinDTO {
@@ -36,14 +37,13 @@ interface IRoiDTO {
 }
 
 const GetCoinsKey = 'GetCoins';
-export const getCoins = (config?: UseQueryOptions<any>) => ({
+export const getCoins = (config?: UseQueryOptions<CoinDTO[]>) => ({
   queryKey: GetCoinsKey,
   queryFn: async () => {
-    const results = await fetch(
+    const { data } = await axios.get<CoinDTO[]>(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=100&page=1&sparkline=false'
     );
-    return results;
+    return data;
   },
   ...config,
-  staleTime: Infinity,
 });

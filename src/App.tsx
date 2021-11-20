@@ -1,31 +1,49 @@
 import React, { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import { CellProps, Column } from 'react-table';
-import { getCoins } from './api/codegeckoApi';
+import { CoinDTO, getCoins } from './api/codegeckoApi';
 import './App.css';
 import Table from './components/table/Table';
 
 function App() {
   const [query, setQuery] = useState(false);
-  const columns: Column<any>[] = useMemo(() => {
+
+  const columns: Column<CoinDTO>[] = useMemo(() => {
     return [
       {
-        accessor: 'initials',
-        Cell: ({ value }: CellProps<any>) => <div>{value}</div>,
-        Header: 'Initials',
+        accessor: 'market_cap',
+        Header: 'Market Cap',
+      },
+      {
+        accessor: 'symbol',
+        Header: 'Symbol',
+      },
+      {
+        accessor: 'name',
+        Header: 'Name',
+      },
+      {
+        accessor: 'current_price',
+        Header: 'Current Price',
+      },
+      {
+        accessor: 'image',
+        Cell: ({ value }: CellProps<CoinDTO>) => <img height={50} src={value} alt="coin" />,
+        Header: 'Image',
+        disableSortBy: true,
       },
     ];
   }, []);
 
-  const data = [{ initials: 'bla' }, { initials: 'blddda' }, { initials: 'bladasdf' }];
-
-  const { data: queriedData, isFetching } = useQuery(getCoins({ enabled: query }));
+  const { data: queriedData = [], isFetching } = useQuery(getCoins({ enabled: query }));
 
   return (
     <div className="App">
-      <div className="table-container">
-        <button onClick={() => setQuery(true)}>Test</button>
-        <Table columns={columns} data={data} />
+      <div className="container">
+        <button className="fetch-button" disabled={isFetching} onClick={() => setQuery(true)}>
+          {isFetching ? <div className="lds-dual-ring" /> : 'Get Coins'}
+        </button>
+        <Table<CoinDTO> columns={columns} data={queriedData} />
       </div>
     </div>
   );
