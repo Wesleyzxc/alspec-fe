@@ -35,7 +35,10 @@ function App() {
     ];
   }, []);
 
-  const { data: queriedData = [], isFetching } = useQuery(getCoins({ enabled: query }));
+  // 5 minutes
+  const fiveMinutesStaleTime = 300000;
+
+  const { data: queriedData = [], isFetching } = useQuery(getCoins({ enabled: query, staleTime: fiveMinutesStaleTime }));
 
   return (
     <div className="App">
