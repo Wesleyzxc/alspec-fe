@@ -1,4 +1,3 @@
-import React from 'react';
 import { Column, TableOptions, useGlobalFilter, useSortBy, useTable } from 'react-table';
 import './Table.css';
 
@@ -13,7 +12,7 @@ const Table = <T extends {}>({ columns, data }: IProps<T> & TableOptions<T>) => 
       data,
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
   );
 
   return (
